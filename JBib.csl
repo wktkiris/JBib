@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" default-locale="ja-JP"  page-range-format="expanded" >
+
+    <info>
+      <title>日本語文献引用スタイル</title>
+      <title-short>JBib</title-short>
+      <id>iriekawaguchi</id>
+      <author>
+        <name>川口いりえ</name>
+      </author>
+      <category field="philosophy"/>
+      <summary>
+        日本語で書かれた文献リストを出力するための設定集です。辰巳智行さん（https://researchmap.jp/n8gozyt-c5s-2_4/）による「社会学評論スタイルガイド 第2版（非公式：邦文文献サブセット）」を改変。
+      </summary>
+      <published>2017-05-12T12:34:56+09:00</published>
+      <updated>2017-05-12T12:34:56+09:00</updated>
+      <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This style file is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
+    </info>
+
+<!-- 各項目の書式を規定するマクロ -->
+    <!--   タイトル  -->
+    <macro name="title">
+      <choose>
+        <if variable="title">
+          <text variable="title"/>
+        </if>
+        <else>
+          <text value="｛標題不明｝"/>
+        </else>
+      </choose>
+    </macro>
+
+
+    <!--   編集者s	-->
+    <macro name="editor">
+    	<names variable="editor"  suffix="編">
+      	<name name-as-sort-order="first" sort-separator="、" delimiter="、" initialize="false" initialize-with="" />
+  	  </names>
+      <names variable="collection-editor"  suffix="編">
+        <name name-as-sort-order="first" sort-separator="、" delimiter="、" initialize="false" initialize-with="" />
+      </names>
+      <names variable="container-author"  suffix="編">
+        <name name-as-sort-order="first" sort-separator="、" delimiter="、" initialize="false" initialize-with="" />
+      </names>
+    </macro>
+
+    <!--   訳者s -->
+    <macro name="translator">
+      <names variable="translator"  suffix="訳">
+        <name name-as-sort-order="first" sort-separator="、" delimiter="、" initialize="false" initialize-with="" />
+      </names>
+    </macro>
+
+    <!-- 編著者不明の場合 -->
+    <macro name="anonymous">
+      <choose>
+        <if type="post-weblog webpage" match="any">
+              <text value="｛著者不明（ウェブサイト名など代えて記載すること）｝"/>
+        </if>
+        <else>
+            <text value="著者不明"/>
+        </else>
+      </choose>
+    </macro>
+
+    <!--   著者s	-->
+    <macro name="author">
+      <names variable="author">
+        <name name-as-sort-order="first" sort-separator="、" delimiter="、" initialize="false" initialize-with=""/>
+        <substitute>
+        	<group suffix="編">
+          	<names variable="editor">
+          		<name name-as-sort-order="first" sort-separator="、" delimiter="、" initialize="false" initialize-with=""/>
+			      </names>
+		      </group>
+          <text variable="publisher"/>
+          <text variable="container-title"/>
+          <text macro="anonymous"/>
+        </substitute>
+      </names>
+    </macro>
+
+
+    <!--   著者s 短い    	-->
+    <macro name="author-short">
+      <names variable="author">
+        <name form="short"  name-as-sort-order="first" sort-separator="、" delimiter="、" initialize="false" initialize-with=""/>
+        <substitute>
+        	<group suffix="編">
+            <names variable="editor">
+              <name form="short"  name-as-sort-order="first" sort-separator="、" delimiter="、" initialize="false" initialize-with=""/>
+    		    </names>
+          </group>
+          <text variable="publisher"/>
+          <text variable="container-title"/>
+          <text macro="anonymous"/>
+        </substitute>
+      </names>
+    </macro>
+
+
+
+    <!--   出版社  -->
+    <macro name="publisher">
+      <choose>
+        <if type="thesis">
+          <group delimiter="、">
+            <text variable="publisher"/>
+            <text variable="publisher-place"/>
+          </group>
+        </if>
+        <else>
+          <group delimiter="">
+            <text variable="publisher"/>
+          </group>
+        </else>
+      </choose>
+    </macro>
+
+
+    <!-- 出版年 -->
+    <macro name="year-date">
+      <choose>
+        <if variable="issued">
+          <date variable="issued">
+            <date-part name="year"  suffix=""/>
+          </date>
+        </if>
+        <else-if type="post-weblog webpage" match="any">
+          <choose>
+            <if variable="accessed">
+              <!--
+                3.8.1　文献注のつけ方
+                (2) 出版年の記載方法
+                ・言及しようとするウェブ文書が固定した出版年をもたない場合は、文書の最新版を用い最終更新年を記載する。
+                ・言及しようとするウェブ文書が固定した出版年をもたず、更新日も不明の場合は、ウェブ文書の取得年を記載する。
+                http://www.gakkai.ne.jp/jss/bulletin/guide3.php#sh3-8
+
+                ただし、著者や更新日（作成日）が不明の文書を先行研究として使用することは、原則として避けるべきである。
+                http://www.gakkai.ne.jp/jss/bulletin/guide3.php#sh3-8
+               -->
+              <date variable="accessed">
+                <date-part name="year"  suffix=""/>
+              </date>
+            </if>
+            <else>
+              <text value="{最終更新日・取得年を要確認}"/>
+            </else>
+          </choose>
+        </else-if>
+        <else>
+          <!--
+              版年が不明な場合は、出版年の代わりにn.d.と記載する（n.d.はno dateの略語である）
+              http://www.gakkai.ne.jp/jss/bulletin/guide4.php
+
+
+              ただし、著者や更新日（作成日）が不明の文書を先行研究として使用することは、原則として避けるべきである。
+              http://www.gakkai.ne.jp/jss/bulletin/guide3.php#sh3-8
+          -->
+            <text value="n.d."/>
+        </else>
+      </choose>
+    </macro>
+
+    <!-- 出版日  -->
+    <macro name="issued_year_month_day">
+      <date variable="issued">
+        <date-part name="year"  suffix=""/>
+      </date>
+    </macro>
+
+    <!-- 出版日 論文 -->
+    <macro name="issued_year_month_day_for_article_type">
+      <date variable="issued">
+        <date-part name="year"  suffix=""/>
+      </date>
+    </macro>
+
+
+    <!-- アクセス日 -->
+    <macro name="accessed_year_month_day">
+      <date variable="accessed">
+        <date-part name="year"  suffix="年"/>
+        <date-part name="month" form="numeric" suffix="月"/>
+        <date-part name="day"  suffix="日"/>
+      </date>
+    </macro>
+
+
+    <!-- ページ数を取得　-->
+    <macro name="pages">
+      <choose>
+       <if variable="page">
+  	    <text variable="page" suffix="頁"/>
+  	   </if>
+     </choose>
+    </macro>
+
+<!-- 本文中引用スタイル　-->
+    <citation et-al-min="4" et-al-use-first="1" et-al-subsequent-min="3" et-al-subsequent-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true" collapse="year"  cite-group-delimiter=", ">
+      <sort>
+        <!-- 著者名略称、年の順に記載 -->
+        <key macro="author-short"/>
+        <key macro="year-date"/>
+      </sort>
+
+      <!--   3.2　文献を示す割注 (著者名略称 年、ページ数頁)   -->
+      <layout prefix="（" suffix="）" delimiter="; ">
+        <group>
+          <group delimiter=" ">
+            <text macro="author-short"/>
+            <text macro="year-date"/>
+          </group>
+          <choose>
+            <if variable="locator">
+              <text value="locator" prefix="、" suffix="頁"/>
+            </if>
+          </choose>
+        </group>
+      </layout>
+    </citation>
+
+<!-- 文献リストの書式　-->
+    <bibliography subsequent-author-substitute="――――" subsequent-author-substitute-rule="complete-all">
+      <!--　文献の情報を　著者、出版年月日、タイトル　の順に並べる -->
+      <sort>
+        <key macro="author"/>
+        <key macro="year-date"/>
+        <key variable="title"/>
+        <key variable="translator"/>
+      </sort>
+
+      <layout>
+        <choose>
+          <!-- 翻訳書の場合 -->
+          <if match="any" variable="translator">
+            <!--
+                  (6) 翻訳書,"翻訳論文
+                  原典の書誌情報.（＝翻訳の出版年、訳者名訳『訳書のタイトル』出版社名。）
+                  原典の書誌情報.（＝翻訳の出版年、訳者名訳「翻訳論文のタイトル」所収書の編者名編『所収書のタイトル』出版社名、翻訳論文の初ページ-終ページ。）
+             -->
+              <choose>
+                <if type="book article" match="any">
+                  <!--
+                    (6)-1　著者名（出版年）『訳書のタイトル』訳者、出版社名。
+                  -->
+                  <text macro="author" suffix="" />
+                  <text macro="year-date" prefix="（" suffix="）" />
+                  <group delimiter=" "  prefix="『" suffix="』" >
+                      <text variable="collection-title"/>
+                      <text variable="title"/>
+                  </group>
+                  <text macro="translator" suffix="、"/>
+                  <text macro="publisher"/>
+                </if>
+                <else-if type="chapter" match="any">
+                  <!--
+                    (6)-2 著者名（発表年）「翻訳論文のタイトル」所収書の編者名編『所収書のタイトル』出版社名、翻訳論文の初ページ-終ページ
+                  -->
+                  <text macro="author"/>
+                  <text macro="year-date" prefix="（" suffix="）" />
+                  <text macro="title" prefix="「" suffix="」、"/>
+                  <text macro="editor" />
+                  <group delimiter=" "  prefix="『" suffix="』、" >
+                      <text variable="collection-title"/>
+                      <text variable="container-title"/>
+                  </group>
+                  <text macro="publisher" suffix="、" />
+                  <text macro="pages" suffix="頁"/>
+                </else-if>
+              </choose>
+             <text value="。"/>
+          </if>
+
+          <!-- 書籍、原稿のばあい -->
+          <else-if type="book manuscript" match="any">
+      			<!--
+                著者（年）『タイトル』、編集者編『収録元』、出版社、ページ（初出: {要編集}）。
+      			-->
+    	      <text macro="author"/>
+            <text macro="year-date"  prefix="（" suffix="）" />
+            <text variable="title" prefix="『" suffix="』、" />
+            <text macro="editor"/>
+            <group delimiter=" "  prefix="『" suffix="』、" >
+    		  		  <text variable="collection-title"/>
+    		  		  <text variable="container-title"/>
+    		    </group>
+            <text macro="publisher" />
+            <text macro="pages" suffix="頁"/>
+            <text variable="note" prefix="（" suffix="）"/>
+            <text value="。"/>
+          </else-if>
+
+          <!-- 論文、チャプター -->
+          <else-if type="chapter article" match="any">
+    		    <!--
+              著者名「タイトル」、編集者『収録元』、出版社、年、ページ。
+    		    -->
+    	      <text macro="author"/>
+            <text macro="year-date"  prefix="（" suffix="）" />
+    		    <text macro="title" prefix="「" suffix="」、"/>
+    		    <text macro="editor" />
+    		    <group delimiter=" "  prefix="『" suffix="』、" >
+    		  		  <text variable="collection-title"/>
+    		  		  <text variable="container-title"/>
+    		    </group>
+            <text macro="publisher" suffix="、" />
+            <text macro="pages"/>
+            <text value="。"/>
+  		    </else-if>
+
+          <!-- 雑誌投稿論文 -->
+          <else-if type="article-journal" match="any">
+        		<!--
+                    著者名（出版年）「タイトル」、『雑誌名』n号(m巻)、論文の初ページ-終ページ。
+         		-->
+    	      <text macro="author"/>
+      		  <text macro="year-date"  prefix="（" suffix="）" />
+      		  <text macro="title"      prefix="「" suffix="」、"/>
+      		  <group delimiter=" "  prefix="『" suffix="』" >
+      		  		  <text variable="collection-title"/>
+      		  		  <text variable="container-title"/>
+      		  </group>
+
+            <group delimiter="">
+                  <text variable="volume" suffix="巻、"/>
+                  <text variable="issue" suffix="号、"/>
+            </group>
+            <text macro="pages"/>
+            <text value="。"/>
+  		    </else-if>
+
+          <else-if type="report">
+            <!--    (8) 調査報告書
+                  研究代表者名、刊行年、『研究課題名』○○年度科学研究費補助金研究成果報告書、研究機関名。
+            -->
+            <text macro="year-date"  suffix="、" />
+            <text macro="title"      prefix="『" suffix="』"/>
+            <text variable="genre" suffix="、"/>
+            <text macro="publisher"/>
+            <text value="。"/>
+          </else-if>
+
+          <else-if type="thesis">
+  		      <!--
+              (10) 修士論文や学会報告原稿など
+                著者名、論文提出年、「論文のタイトル」○○大学大学院○○学研究科○○年度修士論文。
+           -->
+            <text macro="author"     suffix="、" />
+  		      <text macro="year-date"  suffix="、" />
+  		      <text macro="title"      prefix="「" suffix="」"/>
+      		  <group>
+      		    <text macro="publisher"/>
+      		    <text macro="year-date"  suffix="年度" />
+      		  	<text variable="genre" />
+      		  </group>
+            <text value="。"/>
+  		    </else-if>
+
+          <else-if type="paper-conference">
+  		      <!--
+              (10) 修士論文や学会報告原稿など
+              報告者名、大会開催年、「報告のタイトル」第○回日本社会学会大会報告原稿。
+            -->
+            <text macro="author"     suffix="、" />
+  		      <text macro="year-date"  suffix="、" />
+  		      <text macro="title"      prefix="「" suffix="」"/>
+
+  		      <choose>
+              <if variable="container-title">
+  		          <group delimiter=" "  prefix="『" suffix="』" >
+  		  		      <text variable="collection-title"/>
+  		  		      <text variable="container-title"/>
+  		          </group>
+              </if>
+              <else>
+          		  <text variable="event" suffix="報告原稿"/>
+              </else>
+            </choose>
+            <text value="。"/>
+          </else-if>
+
+          <else-if type="webpage">
+            <!--
+            4.5.3　ウェブページ・ブログなどウェブサイト上に掲載された情報
+            著者名、最終更新年、「タイトル」、ウェブサイト名*、（取得日、URL）。
+            ブログ（和文）
+            著者名、最終更新年、「タイトル」、ブログ名*、記事作成日、（取得日、URL）。
+             -->
+            <text macro="author"     suffix="、" />
+            <text macro="year-date"  suffix="、" />
+            <text macro="title"      prefix="「" suffix="」、"/>
+            <choose>
+              <if variable="container-title">
+                <text variable="container-title" suffix="、"/>
+              </if>
+            </choose>
+
+            <group prefix="（" suffix="）">
+              <text macro="accessed_year_month_day" suffix="取得、"/>
+              <text variable="URL"/>
+            </group>
+            <text value="。"/>
+          </else-if>
+
+          <else-if type="post-weblog">
+            <!--
+            4.5.3-2　ブログ（和文）
+            著者名、最終更新年、「タイトル」、ブログ名*、記事作成日、（取得日、URL）。
+             -->
+            <text macro="author"     suffix="、" />
+            <text macro="year-date"  suffix="、" />
+            <text macro="title"      prefix="「" suffix="」、"/>
+            <choose>
+              <if variable="container-title">
+                <text variable="container-title" suffix="、"/>
+              </if>
+            </choose>
+            <text macro="issued_year_month_day" suffix="、"/>
+            <group prefix="（" suffix="）">
+              <text macro="accessed_year_month_day" suffix="取得、"/>
+              <text variable="URL"/>
+            </group>
+            <text value="。"/>
+          </else-if>
+
+          <else-if type="article-newspaper article-magazine" match="any">
+            <!--
+              article-magazine
+                3.7　新聞記事などからの引用 http://www.gakkai.ne.jp/jss/bulletin/guide3.php#sh3-7
+                （『○○新聞』1999.3.15夕刊）
+                （『○○新聞』1999.3.15夕刊、第○版、○○県版、○面 ）
+            -->
+              <group>
+                <text variable="container-title"  prefix="『" suffix="』" />
+                <text macro="issued_year_month_day_for_article_type"/>
+                <text variable="edition"/>
+              </group>
+              <text variable="section" prefix="、"/>
+              <text variable="page" prefix="、" suffix="面"/>
+
+
+            <text macro="author"     suffix="、" />
+            <text macro="year-date"  suffix="、" />
+            <text macro="title"      prefix="「" suffix="」、"/>
+            <choose>
+              <if variable="container-title">
+                <text variable="container-title" suffix="、"/>
+              </if>
+            </choose>
+            <text macro="issued_year_month_day" suffix="、"/>
+            <group prefix="（" suffix="）">
+              <text macro="accessed_year_month_day" suffix="取得、"/>
+              <text variable="URL"/>
+            </group>
+            <text value="。"/>
+          </else-if>
+
+
+
+          <else>
+          		 <text value="注意！未定義タイプ："/>
+               <text macro="author"     suffix="、" />
+               <text macro="year-date"  suffix="、" />
+               <group delimiter=" "  prefix="『" suffix="』" >
+                <text variable="collection-title"/>
+                <text variable="title"/>
+              </group>
+              <text macro="publisher"/>
+              <text value="。"/>
+          </else>
+
+        </choose>
+      </layout>
+    </bibliography>
+  </style>
